@@ -48,9 +48,14 @@ module Piet
     def optimize_mozjpeg(path, opts)
       quality = (0..100).include?(opts[:quality]) ? opts[:quality] : 100
       path.gsub!(/([\(\)\[\]\{\}\*\?\\])/, '\\\\\1')
+
       file = File.new(path)
-      temp_file = File.new("temp_#{path}", 'w')
-      FileUtils.copy_file(file.path, temp_file.path)
+      
+      *temp_path, temp_path_b = path.split('.', -1)
+      temp_path = temp_path.join('.')+'_temp.'+temp_path_b
+      temp_file = File.new(temp_path, 'w')
+
+      FileUtils.copy_file(path, temp_path)
       Mozjpeg.compress temp_file, file, arguments: "-quality #{quality} #{opts[:command_options]}"
       File.delete(temp_file)
     end
