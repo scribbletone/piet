@@ -23,7 +23,7 @@ module Piet
     def optimize_for(path, opts)
       case mimetype(path)
         when "png", "gif" then optimize_png(path, opts)
-        when "jpeg" then optimize_jpg(path, opts)
+        when "jpeg" then optimize_mozjpeg(path, opts)
       end
     end
 
